@@ -34,6 +34,8 @@ FileChange:
     commit_id:           { type: string(200), notnull: true }
     file_path:           { type: string, notnull: true }
     file_change_type_id: { type: integer, notnull: true }
+    insertions:          { type: integer, notnull: false } # only filled after indexing
+    deletions:           { type: integer, notnull: false } # only filled after indexing
   relations:
     Commit:              ~
     FileChangeType:      ~
