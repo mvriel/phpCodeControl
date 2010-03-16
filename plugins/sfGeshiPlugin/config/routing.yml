@@ -1,0 +1,3 @@
+#sfGeshiExample:
+#  url:   /geshi
+#  param: { module: sfGeshiExample, action: index }

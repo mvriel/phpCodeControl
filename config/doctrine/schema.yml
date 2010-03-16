@@ -1,0 +1,32 @@
+Project:
+  columns:
+    name:        string
+    scm_id:  integer
+  relations:
+    Scm: ~
+
+Scm:
+  columns:
+    type:     string
+    host:     string
+    username: string
+    password: string
+    path:     string
+
+Commit:
+  columns:
+    id:        { type: string(200), primary: true }
+    project_id: integer
+    author:     string
+    timestamp:  timestamp
+    message:    string
+  relations:
+    Project: ~
+
+FileChange:
+  columns:
+    commit_id:     string(200)
+    file_path:     string
+    change_type:   string
+  relations:
+    Commit: ~

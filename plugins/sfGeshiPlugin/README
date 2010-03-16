@@ -1,0 +1,171 @@
+sfGeshiPlugin
+========================
+
+Provides very easy use of Generic Syntac Highlighter (GeSHi) in symfony projects.
+Current release of the plugin is based on version 1.0.8.5 of GeSHI.
+
+Installation
+============
+
+Either command line:
+
+    $ ./symfony plugin:install sfGeshiPlugin
+
+or checkouting repository:
+
+    $ svn co http://svn.symfony-project.com/plugins/sfGeshiPlugin/trunk plugins/sfGeshiPlugin
+
+from the project root directory.
+
+Usage
+=====
+
+Original GeSHi library usage
+----------------------------
+
+Although the plugin provides a nice and easy API, you may still want to use
+original GeSHi library class:
+
+    [php]
+    $code_orig = "<?php echo \\\"hello GeSHi\\\"; ?>";
+    $geshi = new GeSHi($code_orig, 'php');
+    $code_high = $geshi->parse_code();
+
+Basic plugin usage
+------------------
+
+The plugin provides you a nice and easy-to-use _sfGeshi_ class with static
+methods. Basic usage of sfGeshiPlugin is based on the __sfGeshi::parse_single__
+method. It's obvious - store all the code you want to highlight in one
+variable and pass it as the first parameter to the __parse_single__ method. The
+second parameter is the language name. See the example below:
+
+    [php]
+    $code_orig = "<?php echo \\\"hello GeSHi\\\"; ?>";
+    $this->code = sfGeshi::parse_single($code_orig, 'php');
+
+That was the action code. The template code is as simple as the previous one:
+
+    [php]
+    <?php echo $code ?>
+
+As you can see, there's nothing difficult.
+
+Advanced plugin usage
+---------------------
+
+You may encounter a problem, when you have a big amount of text mixed with
+code (e. g. more than 10k letter string). If you use standard GeSHi
+highlighting, it will try to highlight also the normal text, which will be
+surrounded with the &lt;pre>...&lt;/pre> tags (so that all your layout will
+break). And this is where the plugin comes to help!
+
+The usage of code-and-text mixed block is... still simple:
+
+    [php]
+    $code_orig = "Hello, mom!";
+    $code_orig .= "[php]<?php echo \\\"hello GeSHi\\\"; ?>[/]";
+    $code_orig .= "Wait, mom!";
+    $code_orig .= "[cpp] class Symfony { public: Symfony() { } }; [/]";
+    $code_orig .= "Bye, mom!";
+    $code_high = sfGeshi::parse_mixed($code_orig);
+
+You might have noticed two very important things:
+
+  *   You don't have to specify the name of the language while calling
+      __sfGeshi::parse_mixed__ method - as you may want to embed codes
+      of many different programming languages at one time.
+
+  *   But you have to specify the name of the language directly inside the
+      mixed block, using [language_name]...[/] meta-plugin-tags.
+
+The method works like this: the mixed text is treated as normal text until
+[language_name] opening tag is found. Then a closing tag shall occur. Such
+a piece of mixed block (beginning from the opening tag and finishing at the
+closing tag) is __replaced__ with its GeSHi syntax highlighting output.
+
+Notes on advanced plugin usage
+------------------------------
+
+The plugin is most useful for IT bloggers and tutorial websites. As
+__sfGeshi::parse_mixed__ needs some time to highlight big amounts of text,
+it's strongly advised to store highlighted version of mixed text in a
+separate column in the blog article table. This is because highlighting
+would be performed only once, the output would be stored in database and
+the result page would be rendered a lot faster (because GeSHi was already
+used).
+
+sfGeshiExample
+==============
+
+The plugin is provided with an example module to test if everything works
+fine. Right after installation, go to your application _config_ directory
+and add _sfGeshiExample_ module to _enabled modules_ section in _settings.yml_
+file. Next step is to edit _config/routing.yml_ file of the plugin - you
+shall uncomment all lines. Then clear the cache:
+
+    $ ./symfony cc
+
+and everything is ready to run:
+
+    http://local.site/geshi
+
+in your browser. You shall see a demonstration of highlighting PHP code of
+the actions.class.php file. The first part tests __parse_single__ method,
+while the second one tests __parse_mixed__ method.
+
+Custom language files
+=====================
+
+Of course, there are lots of languages (probably not very popular ones) which
+are not supported by GeSHi. You may create your own language file (read
+chapter IV of GeSHi documentation for more details). If you do so, let GeSHi
+authors know!
+
+The plugin gives you a possibility to add new syntax highlighting language
+files and overriding existing ones. For this purpose, you shall create new
+files in _sfGeshiPlugin/lib/custom_ directory.
+
+How _parse_single_ works
+------------------------
+
+The __parse_single__ method (which is root of all plugin syntax highlighting)
+tries to find custom language file first (in the _sfGeshiPlugin/lib/custom_
+directory). If it exists, it's used. The original GeSHi file is used only if
+there is no overriding file in the custom directory.
+
+Adding new/overriding language files
+------------------------------------
+
+All new files should appear in the _sfGeshiPlugin/lib/custom_ directory. If you
+want to override a language file, simply copy it from
+_sfGeshiPlugin/lub/geshi/geshi_ directory.
+
+Highlighting layout
+-------------------
+
+This is probably the most interesting feature. And that's how to configure it:
+each language file contains _$language_data_ array which contains subarray
+with _STYLES_ key. This is the part you shall edit.
+
+Language file overriding example
+--------------------------------
+
+An example of syntax highlighting overriding is provided:
+__sfGeshiPlugin/lib/custom/php.php__ file. You can edit _STYLES_ key subarray
+in this file and check the _sfGeshiExample_ action to see the changes. For
+example, in origial PHP GeSHi highlighting comments shall appear green,
+whereas the overriding version makes it purple. Edit the custom file or delete
+it to see the changes.
+
+Documentation
+=============
+
+See the [GeSHi documentation](http://qbnz.com/highlighter/geshi-doc.html).
+
+GeSHi support for YAML
+----------------------
+
+GeSHi is still missing support for our precious YAML language. If you want
+GeSHi to support .yml files as soon as possible, join the quest form geshi-yml-support
+[here](http://sourceforge.net/tracker/index.php?func=detail&aid=1648006&group_id=114997&atid=670234) :)!

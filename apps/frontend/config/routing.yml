@@ -1,0 +1,49 @@
+# You can find more information about this file on the symfony website:
+# http://www.symfony-project.org/reference/1_4/en/10-Routing
+
+commit:
+  class: sfDoctrineRouteCollection
+  options: { model: Commit }
+
+change:
+  class: sfDoctrineRouteCollection
+  options: { model: FileChange }
+
+commit_loader:
+  url: /commit/loader
+  param: { module: commit, action: loader }
+
+commit_report:
+  class: sfDoctrineRoute
+  url: /commit/report/:type/:period
+  param: { module: commit, action: report }
+  options: { model: Commit, type: list }
+
+chart_author_pie:
+  url: /commit/charts/author
+  param: { module: commit, action: ChartAuthorPie }
+
+chart_author_week_pie:
+  url: /commit/charts/author/week
+  param: { module: commit, action: ChartAuthorWeekPie }
+
+chart_author_activity_days:
+  url: /commit/charts/author/activity/days
+  param: { module: commit, action: ChartAuthorActivityDays }
+
+chart_author_activity_hours:
+  url: /commit/charts/author/activity/hours
+  param: { module: commit, action: ChartAuthorActivityHours }
+
+commit_report_param:
+  class: sfDoctrineRoute
+  url: /commit/report/:type/:period/:param
+  param: { module: commit, action: report }
+  options: { model: Commit, type: list }
+  
+# default rules
+homepage:
+  class: sfDoctrineRoute
+  url:   /
+  param: { module: commit, action: index }
+  options: { model: Commit, type: list }

@@ -1,0 +1,4 @@
+# Route for the demo (decomment and activate the stOfcExample module in your settings.yml) 
+#stOfcExample:
+  #url:   /stOfcExample/:action
+  #param: { module: stOfcExample, action: index }

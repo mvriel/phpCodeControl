@@ -1,0 +1,1 @@
+<?php include_component('change', 'show', array('file_change' => $sf_data->getRaw('file_change')));
