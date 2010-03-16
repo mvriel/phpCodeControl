@@ -1,32 +1,39 @@
-Project:
+ScmType:
   columns:
-    name:        string
-    scm_id:  integer
-  relations:
-    Scm: ~
+    name:         { type: string(50), notnull: true }
+    default_port: { type: integer, notnull: true }
 
 Scm:
   columns:
-    type:     string
-    host:     string
-    username: string
-    password: string
-    path:     string
+    scm_type_id: { type: integer, notnull: true }
+    host:        { type: string, notnull: true }
+    port:        { type: integer }
+    username:    { type: string(255), notnull: true }
+    password:    { type: string(255), notnull: true }
+    path:        { type: string, notnull: true }
+  relations:
+    ScmType:     ~
 
 Commit:
   columns:
-    id:        { type: string(200), primary: true }
-    project_id: integer
-    author:     string
-    timestamp:  timestamp
-    message:    string
+    id:         { type: string(200), primary: true }
+    scm_id:     { type: integer, notnull: true }
+    author:     { type: string(100), notnull: true }
+    timestamp:  { type: timestamp, notnull: true }
+    message:    { type: string, notnull: true }
   relations:
-    Project: ~
+    Scm:        ~
+
+FileChangeType:
+  columns:
+    name: { type: string(50), notnull: true }
+    icon: { type: string(50), notnull: true }
 
 FileChange:
   columns:
-    commit_id:     string(200)
-    file_path:     string
-    change_type:   string
+    commit_id:           { type: string(200), notnull: true }
+    file_path:           { type: string, notnull: true }
+    file_change_type_id: { type: integer, notnull: true }
   relations:
-    Commit: ~
+    Commit:              ~
+    FileChangeType:      ~
