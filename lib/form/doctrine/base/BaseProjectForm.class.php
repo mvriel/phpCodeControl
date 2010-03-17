@@ -7,7 +7,7 @@
  *
  * @package    phpCodeControl
  * @subpackage form
- * @author     Your name here
+ * @author     Mike van Riel <mike.vanriel@naenius.com>
  * @version    SVN: $Id: sfDoctrineFormGeneratedTemplate.php 24171 2009-11-19 16:37:50Z Kris.Wallsmith $
  */
 abstract class BaseProjectForm extends BaseFormDoctrine

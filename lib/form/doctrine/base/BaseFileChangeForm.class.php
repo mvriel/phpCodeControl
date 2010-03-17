@@ -7,7 +7,7 @@
  *
  * @package    phpCodeControl
  * @subpackage form
- * @author     Your name here
+ * @author     Mike van Riel <mike.vanriel@naenius.com>
  * @version    SVN: $Id: sfDoctrineFormGeneratedTemplate.php 24171 2009-11-19 16:37:50Z Kris.Wallsmith $
  */
 abstract class BaseFileChangeForm extends BaseFormDoctrine
@@ -15,17 +15,21 @@ abstract class BaseFileChangeForm extends BaseFormDoctrine
   public function setup()
   {
     $this->setWidgets(array(
-      'id'          => new sfWidgetFormInputHidden(),
-      'commit_id'   => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Commit'), 'add_empty' => true)),
-      'file_path'   => new sfWidgetFormTextarea(),
-      'change_type' => new sfWidgetFormTextarea(),
+      'id'                  => new sfWidgetFormInputHidden(),
+      'commit_id'           => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Commit'), 'add_empty' => false)),
+      'file_path'           => new sfWidgetFormTextarea(),
+      'file_change_type_id' => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('FileChangeType'), 'add_empty' => false)),
+      'insertions'          => new sfWidgetFormInputText(),
+      'deletions'           => new sfWidgetFormInputText(),
     ));
 
     $this->setValidators(array(
-      'id'          => new sfValidatorDoctrineChoice(array('model' => $this->getModelName(), 'column' => 'id', 'required' => false)),
-      'commit_id'   => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('Commit'), 'required' => false)),
-      'file_path'   => new sfValidatorString(array('required' => false)),
-      'change_type' => new sfValidatorString(array('required' => false)),
+      'id'                  => new sfValidatorDoctrineChoice(array('model' => $this->getModelName(), 'column' => 'id', 'required' => false)),
+      'commit_id'           => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('Commit'))),
+      'file_path'           => new sfValidatorString(),
+      'file_change_type_id' => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('FileChangeType'))),
+      'insertions'          => new sfValidatorInteger(array('required' => false)),
+      'deletions'           => new sfValidatorInteger(array('required' => false)),
     ));
 
     $this->widgetSchema->setNameFormat('file_change[%s]');

@@ -1,10 +1,10 @@
 ScmType:
   subversion:
     name: Subversion
-    default_port: 0
+    default_port: 3690
   git:
     name: Git
-    default_port: 0
+    default_port: 22
 
 FileChangeType:
   addition:

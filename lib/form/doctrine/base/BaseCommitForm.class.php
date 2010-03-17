@@ -7,7 +7,7 @@
  *
  * @package    phpCodeControl
  * @subpackage form
- * @author     Your name here
+ * @author     Mike van Riel <mike.vanriel@naenius.com>
  * @version    SVN: $Id: sfDoctrineFormGeneratedTemplate.php 24171 2009-11-19 16:37:50Z Kris.Wallsmith $
  */
 abstract class BaseCommitForm extends BaseFormDoctrine
@@ -15,19 +15,19 @@ abstract class BaseCommitForm extends BaseFormDoctrine
   public function setup()
   {
     $this->setWidgets(array(
-      'id'         => new sfWidgetFormInputHidden(),
-      'project_id' => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Project'), 'add_empty' => true)),
-      'author'     => new sfWidgetFormTextarea(),
-      'timestamp'  => new sfWidgetFormDateTime(),
-      'message'    => new sfWidgetFormTextarea(),
+      'id'        => new sfWidgetFormInputHidden(),
+      'scm_id'    => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Scm'), 'add_empty' => false)),
+      'author'    => new sfWidgetFormInputText(),
+      'timestamp' => new sfWidgetFormDateTime(),
+      'message'   => new sfWidgetFormTextarea(),
     ));
 
     $this->setValidators(array(
-      'id'         => new sfValidatorDoctrineChoice(array('model' => $this->getModelName(), 'column' => 'id', 'required' => false)),
-      'project_id' => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('Project'), 'required' => false)),
-      'author'     => new sfValidatorString(array('required' => false)),
-      'timestamp'  => new sfValidatorDateTime(array('required' => false)),
-      'message'    => new sfValidatorString(array('required' => false)),
+      'id'        => new sfValidatorDoctrineChoice(array('model' => $this->getModelName(), 'column' => 'id', 'required' => false)),
+      'scm_id'    => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('Scm'))),
+      'author'    => new sfValidatorString(array('max_length' => 100)),
+      'timestamp' => new sfValidatorDateTime(),
+      'message'   => new sfValidatorString(),
     ));
 
     $this->widgetSchema->setNameFormat('commit[%s]');

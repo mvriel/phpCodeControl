@@ -133,3 +133,22 @@ ul.menu a
   text-decoration:none;
   width:100px;
 }
+
+div#error-box
+{
+  background: #FFDFE0 url('../images/icons/error.png') no-repeat 5px center;
+  padding: 5px;
+  padding-left: 25px;
+  color: maroon;
+  border-bottom: 2px solid gray;
+  font-size: 90%;
+}
+
+div.info-box
+{
+  background-color: #FFFCDF;
+  border-bottom: 2px solid gray;
+  padding: 5px;
+  margin: -5px;
+  margin-bottom: 10px;
+}

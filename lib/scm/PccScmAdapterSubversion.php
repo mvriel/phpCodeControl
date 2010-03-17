@@ -5,25 +5,8 @@
  *
  * @author Mike van Riel <mike.vanriel@naenius.com>
  */
-class PccScmAdapterSubversion implements PccScmAdapterInterface
+class PccScmAdapterSubversion extends PccScmAdapterAbstract
 {
-  /**
-   * Details about the selected SCM
-   * 
-   * @var Scm
-   */
-  protected $scm = null;
-
-  /**
-   * Construct this adapter with the provided Scm details
-   *
-   * @param Scm $scm
-   */
-  public function  __construct(Scm $scm)
-  {
-    $this->scm = $scm;
-  }
-
   /**
    * Executes a subversion command with the correct parameters and returns the result as SimpleXMLElement.
    *
@@ -35,10 +18,16 @@ class PccScmAdapterSubversion implements PccScmAdapterInterface
    */
   protected function execute($command, $arguments = array(), $params = array())
   {
-    $host = $this->scm->getHost();
-    $path = $this->scm->getPath();
-    $username = $this->scm->getUsername();
-    $password = $this->scm->getPassword();
+    $host = $this->getScm()->getHost();
+    $port = $this->getScm()->getPort();
+    if (!$port)
+    {
+      $port = $this->getScm()->getScmType()->getDefaultPort();
+    }
+    
+    $path = $this->getScm()->getPath();
+    $username = $this->getScm()->getUsername();
+    $password = $this->getScm()->getPassword();
 
     // compose command and execute
     foreach ($arguments as &$argument)
@@ -59,7 +48,12 @@ class PccScmAdapterSubversion implements PccScmAdapterInterface
 
     // execute command and store the output
     $output = array();
-    exec($command, $output);
+    exec($command, $output, $error);
+
+    if ($error != 0)
+    {
+      throw new Exception('The scm command failed with the following error code and content: '.implode(PHP_EOL, $output).' ('.$error.')');
+    }
     return implode(PHP_EOL, $output);
   }
 
@@ -77,18 +71,16 @@ class PccScmAdapterSubversion implements PccScmAdapterInterface
   }
 
   /**
-   * Returns an array of Commit objects.
+   * Retrieves the commits since the given revision and populates a set of Commit Models.
    *
-   * The returned Commit objects are not saved to the database to prevent key conflicts and provide the
-   * possibility to be manipulated.
-   *
-   * Note: The project id is not set, before the commits can be saved this need to be set first
+   * By default the commit models are not saved unless the $save parameter is set to true.
    *
    * @param mixed $since the revision where to start retrieving objects
+   * @param boolean $save
    *
    * @return array of Commit objects
    */
-  public function getCommits($since = null)
+  public function getCommits($since = null, $save = false)
   {
     // retrieve commits
     $params = array('verbose' => '', 'xml' => '');
@@ -104,6 +96,7 @@ class PccScmAdapterSubversion implements PccScmAdapterInterface
     {
       $commit = new Commit();
       $commit->setId((string)$entry['revision']);
+      $commit->setScmId($this->getScm()->getId());
       $commit->setAuthor((string)$entry->author);
       $commit->setTimestamp(date("Y-m-d H:i:s", strtotime($entry->date)));
       $commit->setMessage((string)$entry->msg);
@@ -112,10 +105,45 @@ class PccScmAdapterSubversion implements PccScmAdapterInterface
         $change = new FileChange();
         $change->setCommit($commit);
         $change->setFilePath((string)$path);
-        $change->setChangeType((string)$path['action']);
+        switch ((string)$path['action'])
+        {
+          case 'A': $change->setFileChangeTypeId(1); break;
+          case 'M': $change->setFileChangeTypeId(2); break;
+          case 'D': $change->setFileChangeTypeId(3); break;
+          default:
+            $change->setFileChangeTypeId(4); break;
+//            throw new Exception('An unknown file change type was encountered: '.(string)$path['action']);
+        }
+
+//        $params = array('change' => $commit->getId(), 'extensions' => '-b -w --ignore-eol-style');
+//        $content = $this->execute('diff', array('%HOST%'.(string)$path), $params);
+//        
+//        // all unified diffs start with a - and +, thus we offset the additions and deletions
+//        $insertions = -1;
+//        $deletions = -1;
+//
+//        // iterate through the unified diff and collect each line starting with a - and +
+//        foreach(explode(PHP_EOL, $content) as $line)
+//        {
+//          if (!isset($line[0])) continue;
+//
+//          switch ($line[0])
+//          {
+//            case '+': $insertions++; break;
+//            case '-': $deletions++; break;
+//          }
+//        }
+//        $change->setInsertions($insertions);
+//        $change->setDeletions($deletions);
+        
         $commit->getFileChange()->add($change);
       }
-
+      
+      if ($save)
+      {
+        $commit->save();
+      }
+      echo '.';
       $commits[] = $commit;
     }
 

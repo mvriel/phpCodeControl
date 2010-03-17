@@ -19,6 +19,11 @@
     <ul class="menu">
       <li><a href="<?php echo url_for('@homepage');?>">Home</a></li>
     </ul>
+    <?php if ($sf_user->hasFlash('error')): ?>
+    <div id="error-box">
+      <?php echo $sf_user->getFlash('error'); ?>
+    </div>
+    <?php endif; ?>
     <?php echo $sf_content ?>
   </body>
 </html>

@@ -6,7 +6,7 @@ class phpccUpdateTask extends sfBaseTask
   {
     // add your own arguments here
     $this->addArguments(array(
-      new sfCommandArgument('project', sfCommandArgument::REQUIRED, 'The id of the project to update'),
+      new sfCommandArgument('scm', sfCommandArgument::REQUIRED, 'The id of the scm definition to update'),
     ));
 
     $this->addOptions(array(
@@ -26,11 +26,11 @@ Call it with:
 EOF;
   }
 
-  protected function getLastCommitIdFromDatabase($project)
+  protected function getLastCommitIdFromDatabase($scm_id)
   {
     $last_db_commit = Doctrine_Query::create()->
       select('id')->from('Commit')->
-      where('project_id=?', $project)->
+      where('scm_id=?', $scm_id)->
       orderBy('timestamp DESC')->limit(1)->
       fetchOne();
 
@@ -48,34 +48,42 @@ EOF;
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'] ? $options['connection'] : null)->getConnection();
 
-    $project = Doctrine::getTable('Project')->findOneById($arguments['project']);
-    $scm = $project->getScm();
+    $scm = Doctrine::getTable('Scm')->findOneById($arguments['scm']);
 
-    $scm_object = new PccScmAdapterSubversion($scm);
+    $scm_object = $scm->getAdapter();
 
     $this->logSection('info', 'Determining latest revision number');
     $last_commit_id = $scm_object->getLastRevisionId();
-    $last_commit_id_db = $this->getLastCommitIdFromDatabase($arguments['project']);
+    $last_commit_id_db = $this->getLastCommitIdFromDatabase($arguments['scm']);
 
     if ($last_commit_id == $last_commit_id_db)
     {
       $this->logSection('info', 'Database is up to date');
       return;
     }
-    $this->logSection('info', 'Database reports revision '.$last_commit_id_db.' as latest and SCM reports '.$last_commit_id);
-    $this->logSection('info', 'Importing commits from subversion starting at revision '.$last_commit_id_db.' (please wait as this can take some time)');
 
-    $commits = $scm_object->getCommits($last_commit_id_db);
-    foreach ($commits as $commit)
+    if ($last_commit_id_db)
     {
-      $commit->setProjectId($arguments['project']);
-      $commit->save();
-      foreach($commit->getFileChange() as $change)
-      {
-        $change->save();
-      }
-      $this->logSection('info', 'Processed revision '.$commit->getId().' ('.count($commit->getFileChange()).' files touched)');
+      $this->logSection('info', 'Database reports revision '.$last_commit_id_db.' as latest and SCM reports '.$last_commit_id);
+      $this->logSection('info', 'Importing commits from subversion starting at revision '.$last_commit_id_db.' (please wait as this can take some time)');
     }
+    else
+    {
+      $this->logSection('warning', 'This appears to be your first import of this project, this can take several minutes depending on the size of your project.');
+      $this->logSection('info', 'Importing commits from subversion.');
+    }
+
+    $commits = $scm_object->getCommits($last_commit_id_db, true);
+//    foreach ($commits as $commit)
+//    {
+//      $commit->setScmId($arguments['scm']);
+//      $commit->save();
+//      foreach($commit->getFileChange() as $change)
+//      {
+//        $change->save();
+//      }
+//      $this->logSection('info', 'Processed revision '.$commit->getId().' ('.count($commit->getFileChange()).' files touched)');
+//    }
     $this->logSection('info', 'Finished importing commits');
   }
 

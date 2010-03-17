@@ -7,7 +7,7 @@
  *
  * @package    phpCodeControl
  * @subpackage form
- * @author     Your name here
+ * @author     Mike van Riel <mike.vanriel@naenius.com>
  * @version    SVN: $Id: sfDoctrineFormGeneratedTemplate.php 24171 2009-11-19 16:37:50Z Kris.Wallsmith $
  */
 abstract class BaseScmForm extends BaseFormDoctrine
@@ -15,21 +15,23 @@ abstract class BaseScmForm extends BaseFormDoctrine
   public function setup()
   {
     $this->setWidgets(array(
-      'id'       => new sfWidgetFormInputHidden(),
-      'type'     => new sfWidgetFormTextarea(),
-      'host'     => new sfWidgetFormTextarea(),
-      'username' => new sfWidgetFormTextarea(),
-      'password' => new sfWidgetFormTextarea(),
-      'path'     => new sfWidgetFormTextarea(),
+      'id'          => new sfWidgetFormInputHidden(),
+      'scm_type_id' => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('ScmType'), 'add_empty' => false)),
+      'host'        => new sfWidgetFormTextarea(),
+      'port'        => new sfWidgetFormInputText(),
+      'username'    => new sfWidgetFormInputText(),
+      'password'    => new sfWidgetFormInputText(),
+      'path'        => new sfWidgetFormTextarea(),
     ));
 
     $this->setValidators(array(
-      'id'       => new sfValidatorDoctrineChoice(array('model' => $this->getModelName(), 'column' => 'id', 'required' => false)),
-      'type'     => new sfValidatorString(array('required' => false)),
-      'host'     => new sfValidatorString(array('required' => false)),
-      'username' => new sfValidatorString(array('required' => false)),
-      'password' => new sfValidatorString(array('required' => false)),
-      'path'     => new sfValidatorString(array('required' => false)),
+      'id'          => new sfValidatorDoctrineChoice(array('model' => $this->getModelName(), 'column' => 'id', 'required' => false)),
+      'scm_type_id' => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('ScmType'))),
+      'host'        => new sfValidatorString(),
+      'port'        => new sfValidatorInteger(array('required' => false)),
+      'username'    => new sfValidatorString(array('max_length' => 255)),
+      'password'    => new sfValidatorString(array('max_length' => 255)),
+      'path'        => new sfValidatorString(),
     ));
 
     $this->widgetSchema->setNameFormat('scm[%s]');

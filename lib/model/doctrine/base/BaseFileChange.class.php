@@ -7,21 +7,30 @@
  * 
  * @property string $commit_id
  * @property string $file_path
- * @property string $change_type
+ * @property integer $file_change_type_id
+ * @property integer $insertions
+ * @property integer $deletions
  * @property Commit $Commit
+ * @property FileChangeType $FileChangeType
  * 
- * @method string     getCommitId()    Returns the current record's "commit_id" value
- * @method string     getFilePath()    Returns the current record's "file_path" value
- * @method string     getChangeType()  Returns the current record's "change_type" value
- * @method Commit     getCommit()      Returns the current record's "Commit" value
- * @method FileChange setCommitId()    Sets the current record's "commit_id" value
- * @method FileChange setFilePath()    Sets the current record's "file_path" value
- * @method FileChange setChangeType()  Sets the current record's "change_type" value
- * @method FileChange setCommit()      Sets the current record's "Commit" value
+ * @method string         getCommitId()            Returns the current record's "commit_id" value
+ * @method string         getFilePath()            Returns the current record's "file_path" value
+ * @method integer        getFileChangeTypeId()    Returns the current record's "file_change_type_id" value
+ * @method integer        getInsertions()          Returns the current record's "insertions" value
+ * @method integer        getDeletions()           Returns the current record's "deletions" value
+ * @method Commit         getCommit()              Returns the current record's "Commit" value
+ * @method FileChangeType getFileChangeType()      Returns the current record's "FileChangeType" value
+ * @method FileChange     setCommitId()            Sets the current record's "commit_id" value
+ * @method FileChange     setFilePath()            Sets the current record's "file_path" value
+ * @method FileChange     setFileChangeTypeId()    Sets the current record's "file_change_type_id" value
+ * @method FileChange     setInsertions()          Sets the current record's "insertions" value
+ * @method FileChange     setDeletions()           Sets the current record's "deletions" value
+ * @method FileChange     setCommit()              Sets the current record's "Commit" value
+ * @method FileChange     setFileChangeType()      Sets the current record's "FileChangeType" value
  * 
  * @package    phpCodeControl
  * @subpackage model
- * @author     Your name here
+ * @author     Mike van Riel <mike.vanriel@naenius.com>
  * @version    SVN: $Id: Builder.php 7021 2010-01-12 20:39:49Z lsmith $
  */
 abstract class BaseFileChange extends sfDoctrineRecord
@@ -31,13 +40,24 @@ abstract class BaseFileChange extends sfDoctrineRecord
         $this->setTableName('file_change');
         $this->hasColumn('commit_id', 'string', 200, array(
              'type' => 'string',
+             'notnull' => true,
              'length' => '200',
              ));
         $this->hasColumn('file_path', 'string', null, array(
              'type' => 'string',
+             'notnull' => true,
              ));
-        $this->hasColumn('change_type', 'string', null, array(
-             'type' => 'string',
+        $this->hasColumn('file_change_type_id', 'integer', null, array(
+             'type' => 'integer',
+             'notnull' => true,
+             ));
+        $this->hasColumn('insertions', 'integer', null, array(
+             'type' => 'integer',
+             'notnull' => false,
+             ));
+        $this->hasColumn('deletions', 'integer', null, array(
+             'type' => 'integer',
+             'notnull' => false,
              ));
     }
 
@@ -46,6 +66,10 @@ abstract class BaseFileChange extends sfDoctrineRecord
         parent::setUp();
         $this->hasOne('Commit', array(
              'local' => 'commit_id',
+             'foreign' => 'id'));
+
+        $this->hasOne('FileChangeType', array(
+             'local' => 'file_change_type_id',
              'foreign' => 'id'));
     }
 }

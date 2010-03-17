@@ -10,18 +10,36 @@ class changeComponents extends sfComponents
     include_once('Text/Diff/Engine/string.php');
 
     $this->previous_commit = $this->file_change->findPrevious();
-
+    $this->inline_diff = null;
+    $this->unified_diff = null;
+    
     // get the SCM adapter
-    $scm = $this->file_change->getCommit()->getProject()->getScm();
-    $svn = new PccScmAdapterSubversion($scm);
+    $scm = $this->file_change->getCommit()->getScm();
+    $scm_adapter = $scm->getAdapter();
 
     // get the code of the request version
-    $this->code = $svn->getFileContents($this->file_change->getFilePath(), $this->file_change->getCommitId());
+    try
+    {
+      $this->code = $scm_adapter->getFileContents($this->file_change->getFilePath(), $this->file_change->getCommitId());
+    }
+    catch(Exception $e)
+    {
+      $this->getUser()->setFlash('error', 'Unable to retrieve the source code from the SCM server; perhaps it is unavailable?');
+      return;
+    }
 
     // if a previous version exists, retrieve the file and diff the result
     if ($this->previous_commit)
     {
-      $old = $svn->getFileContents($this->file_change->getFilePath(), $this->previous_commit->getId());
+      try
+      {
+        $old = $scm_adapter->getFileContents($this->file_change->getFilePath(), $this->previous_commit->getId());
+      }
+      catch(Exception $e)
+      {
+        $this->getUser()->setFlash('error', 'Unable to retrieve the source code from the SCM server; perhaps it is unavailable?');
+        return;
+      }
 
       // prepare diff
       $diff = new Text_Diff('auto', array(explode(PHP_EOL, $old), explode(PHP_EOL, $this->code)));

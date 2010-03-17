@@ -6,8 +6,8 @@ class CommitTable extends Doctrine_Table
   {
     $q = Doctrine_Query::create()
       ->orderBy('timestamp DESC')
-      ->from('Commit c');
-//      ->where('scm_id = ?', $scm_id);
+      ->from('Commit c')
+      ->where('scm_id = ?', $scm_id);
 
     if (isset($this->period_start))
     {

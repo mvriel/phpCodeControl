@@ -26,8 +26,18 @@ class commitActions extends sfActions
   public function executeIndex(sfWebRequest $request)
   {
     // required parameter; the id of the scm to show
-    $scm_id       = $request->getParameter('scm');
-    $this->scm    = Doctrine::getTable('scm')->findOneById($scm_id);
+    $scm_id = $request->getParameter('scm');
+    if (!$scm_id)
+    {
+      $scms = Doctrine::getTable('scm')->findAll();
+      $this->scm = $scms->getFirst();
+      $scm_id = $this->scm->getId();
+    }
+    else
+    {
+      $this->scm = Doctrine::getTable('scm')->findOneById($scm_id);
+    }
+    
     $this->forward404Unless($this->scm);
 
     // if we have received the parameters to show a report, redirect handling to the reports
@@ -62,7 +72,16 @@ class commitActions extends sfActions
   {
     // required parameter; the id of the scm to show
     $scm_id    = $request->getParameter('scm');
-    $this->scm = Doctrine::getTable('scm')->findOneById($scm_id);
+    if (!$scm_id)
+    {
+      $scms = Doctrine::getTable('scm')->findAll();
+      $this->scm = $scms->getFirst();
+      $scm_id = $this->scm->getId();
+    }
+    else
+    {
+      $this->scm = Doctrine::getTable('scm')->findOneById($scm_id);
+    }
 
     // collect all parameters
     $type      = $request->getParameter('type');
@@ -126,6 +145,14 @@ class commitActions extends sfActions
   public function executeShow(sfWebRequest $request)
   {
     $this->commit = $this->getRoute()->getObject();
+
+    $file_change_id = $request->getParameter('file_change', null);
+    $this->selected_change = $file_change_id ? Doctrine::getTable('FileChange')->find($file_change_id) : null;
+
+    if (!$this->selected_change)
+    {
+      $this->selected_change = $this->commit->getFileChange()->getFirst();
+    }
   }
 
   /**

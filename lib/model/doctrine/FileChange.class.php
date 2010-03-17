@@ -15,7 +15,7 @@ class FileChange extends BaseFileChange
   public function findPrevious()
   {
     // if this is an addition, return null
-    if ($this->getChangeType() == 'A')
+    if ($this->getFileChangeTypeId() == 1)
     {
       return null;
     }
@@ -24,7 +24,7 @@ class FileChange extends BaseFileChange
     return Doctrine_Query::create()->
             addFrom('Commit c')->
             innerJoin('c.FileChange fc')->
-            where('c.project_id=?', $this->getCommit()->getProjectId())->
+            where('c.scm_id=?', $this->getCommit()->getScmId())->
             andWhere('fc.file_path=?', $this->getFilePath())->
             andWhere('c.timestamp < ?', $this->getCommit()->getTimestamp())->
             addOrderBy('c.timestamp DESC')->
