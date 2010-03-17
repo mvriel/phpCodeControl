@@ -21,7 +21,7 @@ class changeComponents extends sfComponents
     try
     {
       $this->code = (!sfConfig::get('app_simulate_scm', false)) ?
-        $scm_adapter->getFileContents($this->file_change->getFilePath(), $this->file_change->getCommitId()) :
+        $scm_adapter->getFileContents($this->file_change->getFilePath(), $this->file_change->getCommit()->getRevision()) :
         file_get_contents(sfConfig::get('sf_data_dir').'/example_final.diff');
     }
     catch(Exception $e)
@@ -36,7 +36,7 @@ class changeComponents extends sfComponents
       try
       {
         $old = (!sfConfig::get('app_simulate_scm', false)) ?
-          $scm_adapter->getFileContents($this->file_change->getFilePath(), $this->previous_commit->getId()) :
+          $scm_adapter->getFileContents($this->file_change->getFilePath(), $this->previous_commit->getRevision()) :
           file_get_contents(sfConfig::get('sf_data_dir').'/example.diff');
       }
       catch(Exception $e)
