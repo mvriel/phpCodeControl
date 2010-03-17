@@ -20,7 +20,9 @@ class changeComponents extends sfComponents
     // get the code of the request version
     try
     {
-      $this->code = $scm_adapter->getFileContents($this->file_change->getFilePath(), $this->file_change->getCommitId());
+      $this->code = (!sfConfig::get('app_simulate_scm', false)) ?
+        $scm_adapter->getFileContents($this->file_change->getFilePath(), $this->file_change->getCommitId()) :
+        file_get_contents(sfConfig::get('sf_data_dir').'/example_final.diff');
     }
     catch(Exception $e)
     {
@@ -33,7 +35,9 @@ class changeComponents extends sfComponents
     {
       try
       {
-        $old = $scm_adapter->getFileContents($this->file_change->getFilePath(), $this->previous_commit->getId());
+        $old = (!sfConfig::get('app_simulate_scm', false)) ?
+          $scm_adapter->getFileContents($this->file_change->getFilePath(), $this->previous_commit->getId()) :
+          file_get_contents(sfConfig::get('sf_data_dir').'/example.diff');
       }
       catch(Exception $e)
       {
@@ -45,9 +49,17 @@ class changeComponents extends sfComponents
       $diff = new Text_Diff('auto', array(explode(PHP_EOL, $old), explode(PHP_EOL, $this->code)));
       $inline_renderer = new Text_Diff_Renderer_Inline();
       $unified_renderer = new Text_Diff_Renderer_Unified();
-
+      $this->code = sfGeshi::parse_single($this->code, 'php');
+      
       // execute and store diff
       $this->inline_diff = $inline_renderer->render($diff);
+
+      // if the diff is empty, no changes can be found (which is unusual)
+      if (!$this->inline_diff)
+      {
+        $this->inline_diff = $this->code;
+      }
+      
       $this->unified_diff = $unified_renderer->render($diff);
     }
   }

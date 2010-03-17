@@ -6,18 +6,26 @@
   <?php endif; ?>
 </div>
 
-<?php if ($previous_commit): ?>
-  <div class="tabs">
-    <ul>
-      <li><a href="#tabs-1">Summary</a></li>
-      <li><a href="#tabs-2">Full view</a></li>
-    </ul>
-    <div id="tabs-1"><pre><?php echo $unified_diff ? $unified_diff : include_partial('global/error_large', array('message' => 'There was an error while obtaining the difference.')); ?></pre></div>
-    <div id="tabs-2"><pre><?php echo $inline_diff ? $inline_diff : include_partial('global/error_large', array('message' => 'There was an error while obtaining the difference.')); ?></pre></div>
+<div class="tabs">
+  <ul>
+    <?php if ($previous_commit): ?>
+    <li><a href="#tabs-1">Summary</a></li>
+    <?php endif; ?>
+    <li><a href="#tabs-2">Full view</a></li>
+  </ul>
+  <?php if ($previous_commit): ?>
+  <div id="tabs-1"><pre><?php echo !is_null($unified_diff) ? sfGeshi::parse_single($sf_data->getRaw('unified_diff'), 'diff') : include_partial('global/error_large', array('message' => 'There was an error while obtaining the difference.')); ?></pre></div>
+  <?php endif; ?>
+  <div id="tabs-2">
+    <pre>
+      <?php if ($previous_commit): ?>
+        <?php echo !is_null($inline_diff) ? $sf_data->getRaw('inline_diff') : include_partial('global/error_large', array('message' => 'There was an error while obtaining the difference.')); ?>
+      <?php else: ?>
+        <?php echo $sf_data->getRaw('code'); ?>
+      <?php endif; ?>
+    </pre>
   </div>
-  <script type="text/javascript">
-    jQuery(".tabs").tabs();
-  </script>
-<?php else: ?>
-  <pre><?php echo $code; ?></pre>
-<?php endif; ?>
+</div>
+<script type="text/javascript">
+  jQuery(".tabs").tabs();
+</script>
