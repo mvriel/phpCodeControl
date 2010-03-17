@@ -29,14 +29,14 @@ EOF;
   protected function getLastCommitIdFromDatabase($scm_id)
   {
     $last_db_commit = Doctrine_Query::create()->
-      select('id')->from('Commit')->
+      select('revision')->from('Commit')->
       where('scm_id=?', $scm_id)->
       orderBy('timestamp DESC')->limit(1)->
       fetchOne();
 
     if ($last_db_commit)
     {
-      return $last_db_commit->getId();
+      return $last_db_commit->getRevision();
     }
 
     return null;

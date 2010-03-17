@@ -13,7 +13,7 @@ abstract class BaseFileChangeFormFilter extends BaseFormFilterDoctrine
   public function setup()
   {
     $this->setWidgets(array(
-      'commit_id'           => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Commit'), 'add_empty' => true)),
+      'commit_revision'     => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Commit'), 'add_empty' => true)),
       'file_path'           => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'file_change_type_id' => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('FileChangeType'), 'add_empty' => true)),
       'insertions'          => new sfWidgetFormFilterInput(),
@@ -21,7 +21,7 @@ abstract class BaseFileChangeFormFilter extends BaseFormFilterDoctrine
     ));
 
     $this->setValidators(array(
-      'commit_id'           => new sfValidatorDoctrineChoice(array('required' => false, 'model' => $this->getRelatedModelName('Commit'), 'column' => 'id')),
+      'commit_revision'     => new sfValidatorDoctrineChoice(array('required' => false, 'model' => $this->getRelatedModelName('Commit'), 'column' => 'id')),
       'file_path'           => new sfValidatorPass(array('required' => false)),
       'file_change_type_id' => new sfValidatorDoctrineChoice(array('required' => false, 'model' => $this->getRelatedModelName('FileChangeType'), 'column' => 'id')),
       'insertions'          => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
@@ -46,7 +46,7 @@ abstract class BaseFileChangeFormFilter extends BaseFormFilterDoctrine
   {
     return array(
       'id'                  => 'Number',
-      'commit_id'           => 'ForeignKey',
+      'commit_revision'     => 'ForeignKey',
       'file_path'           => 'Text',
       'file_change_type_id' => 'ForeignKey',
       'insertions'          => 'Number',

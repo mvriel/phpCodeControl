@@ -95,7 +95,7 @@ class PccScmAdapterSubversion extends PccScmAdapterAbstract
     foreach ($content->logentry as $entry)
     {
       $commit = new Commit();
-      $commit->setId((string)$entry['revision']);
+      $commit->setRevision((string)$entry['revision']);
       $commit->setScmId($this->getScm()->getId());
       $commit->setAuthor((string)$entry->author);
       $commit->setTimestamp(date("Y-m-d H:i:s", strtotime($entry->date)));

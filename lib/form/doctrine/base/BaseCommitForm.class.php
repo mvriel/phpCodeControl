@@ -16,6 +16,7 @@ abstract class BaseCommitForm extends BaseFormDoctrine
   {
     $this->setWidgets(array(
       'id'        => new sfWidgetFormInputHidden(),
+      'revision'  => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('FileChange'), 'add_empty' => false)),
       'scm_id'    => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Scm'), 'add_empty' => false)),
       'author'    => new sfWidgetFormInputText(),
       'timestamp' => new sfWidgetFormDateTime(),
@@ -24,11 +25,16 @@ abstract class BaseCommitForm extends BaseFormDoctrine
 
     $this->setValidators(array(
       'id'        => new sfValidatorDoctrineChoice(array('model' => $this->getModelName(), 'column' => 'id', 'required' => false)),
+      'revision'  => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('FileChange'))),
       'scm_id'    => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('Scm'))),
       'author'    => new sfValidatorString(array('max_length' => 100)),
       'timestamp' => new sfValidatorDateTime(),
       'message'   => new sfValidatorString(),
     ));
+
+    $this->validatorSchema->setPostValidator(
+      new sfValidatorDoctrineUnique(array('model' => 'Commit', 'column' => array('revision', 'scm_id')))
+    );
 
     $this->widgetSchema->setNameFormat('commit[%s]');
 

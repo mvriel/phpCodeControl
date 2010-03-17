@@ -10,7 +10,7 @@
       </tr>
       <tr>
         <th>Revision:</th>
-        <td><?php echo $commit->getId() ?></td>
+        <td><?php echo $commit->getRevision() ?></td>
       </tr>
       <tr>
         <th>Author:</th>

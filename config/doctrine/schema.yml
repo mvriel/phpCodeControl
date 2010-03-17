@@ -16,13 +16,19 @@ Scm:
 
 Commit:
   columns:
-    id:         { type: string(200), primary: true }
+    revision:   { type: string(200), notnull: true }
     scm_id:     { type: integer, notnull: true }
     author:     { type: string(100), notnull: true }
     timestamp:  { type: timestamp, notnull: true }
     message:    { type: string, notnull: true }
   relations:
     Scm:        ~
+  indexes:
+    revision:
+      fields:
+        revision: []
+        scm_id: []
+      type: unique
 
 FileChangeType:
   columns:
@@ -31,11 +37,11 @@ FileChangeType:
 
 FileChange:
   columns:
-    commit_id:           { type: string(200), notnull: true }
+    commit_revision:     { type: string(200), notnull: true }
     file_path:           { type: string, notnull: true }
     file_change_type_id: { type: integer, notnull: true }
     insertions:          { type: integer, notnull: false } # only filled after indexing
     deletions:           { type: integer, notnull: false } # only filled after indexing
   relations:
-    Commit:              ~
+    Commit:              { local: commit_revision, foreign: revision }
     FileChangeType:      ~

@@ -16,7 +16,7 @@ abstract class BaseFileChangeForm extends BaseFormDoctrine
   {
     $this->setWidgets(array(
       'id'                  => new sfWidgetFormInputHidden(),
-      'commit_id'           => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Commit'), 'add_empty' => false)),
+      'commit_revision'     => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('Commit'), 'add_empty' => false)),
       'file_path'           => new sfWidgetFormTextarea(),
       'file_change_type_id' => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('FileChangeType'), 'add_empty' => false)),
       'insertions'          => new sfWidgetFormInputText(),
@@ -25,7 +25,7 @@ abstract class BaseFileChangeForm extends BaseFormDoctrine
 
     $this->setValidators(array(
       'id'                  => new sfValidatorDoctrineChoice(array('model' => $this->getModelName(), 'column' => 'id', 'required' => false)),
-      'commit_id'           => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('Commit'))),
+      'commit_revision'     => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('Commit'))),
       'file_path'           => new sfValidatorString(),
       'file_change_type_id' => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('FileChangeType'))),
       'insertions'          => new sfValidatorInteger(array('required' => false)),
