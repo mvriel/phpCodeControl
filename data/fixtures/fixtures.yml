@@ -16,3 +16,6 @@ FileChangeType:
   deletion:
     name: Deletion
     icon: delete
+  unknown:
+    name: Unknown
+    icon: modify
