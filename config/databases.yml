@@ -6,5 +6,5 @@ all:
     class: sfDoctrineDatabase
     param:
       dsn:      mysql:host=localhost;dbname=phpCodeControl
-      username: root
-      password: 
+      username: phpCodeControl
+      password: 1nC0ntr0l
