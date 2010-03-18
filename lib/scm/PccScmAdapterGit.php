@@ -26,7 +26,6 @@ class PccScmAdapterGit extends PccScmAdapterAbstract
 
     // execute command and store the output
     $output = array();
-    echo $command;
     exec($command, $output, $error);
 
     if ($error != 0)
@@ -85,7 +84,7 @@ class PccScmAdapterGit extends PccScmAdapterAbstract
     chdir($cwd);
 
     $changes = $this->parseGitLogRawOutput($content);
-var_dump($changes);die();
+
     // generate commit objects with changes
     $commits = array();
     foreach ($changes as $revision => $change)
@@ -161,7 +160,10 @@ var_dump($changes);die();
     }
     else
     {
-      $this->execute('pull', array(), array('git-dir' => $local_repo));
+      $cwd = getcwd();
+      chdir($local_repo);
+      $this->execute('pull', array(), array());
+      chdir($cwd);
     }
   }
 
@@ -197,15 +199,15 @@ var_dump($changes);die();
     return sfConfig::get('sf_data_dir').'/'.str_replace(array('/',':'), '_', $this->getScm()->getHost()).'/'.str_replace(array('/'), '_', $this->getScm()->getPath());
   }
 
-  protected function parseGitLogRawOutput($output)
+  protected function parseGitLogRawOutput($input)
   {
     $current_line = 0;
     $output = array();
     $current_revision = null;
-    foreach($output as $line)
+    foreach($input as $line)
     {
       // if a new commit is coming by
-      if ('commit' == substr($line, 0, 5))
+      if ('commit' == substr($line, 0, 6))
       {
         $parts = explode(' ', $line);
         $current_revision = $parts[1];
@@ -239,8 +241,8 @@ var_dump($changes);die();
       {
         // explode parts
         // save the path in the key and the type of change in the value
-        $parts = explode(':', $line);
-        $output[$current_revision]['filechanges'][$parts[5]] = $parts[4];
+        $parts = explode(' ', $line);
+        $output[$current_revision]['filechanges'][trim(substr($parts[4], 1))] = substr($parts[4], 0, 1);
       }
 
       // add one to the line counter
