@@ -13,15 +13,17 @@ abstract class BaseScmFormFilter extends BaseFormFilterDoctrine
   public function setup()
   {
     $this->setWidgets(array(
+      'name'        => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'scm_type_id' => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('ScmType'), 'add_empty' => true)),
       'host'        => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'port'        => new sfWidgetFormFilterInput(),
-      'username'    => new sfWidgetFormFilterInput(array('with_empty' => false)),
-      'password'    => new sfWidgetFormFilterInput(array('with_empty' => false)),
+      'username'    => new sfWidgetFormFilterInput(),
+      'password'    => new sfWidgetFormFilterInput(),
       'path'        => new sfWidgetFormFilterInput(array('with_empty' => false)),
     ));
 
     $this->setValidators(array(
+      'name'        => new sfValidatorPass(array('required' => false)),
       'scm_type_id' => new sfValidatorDoctrineChoice(array('required' => false, 'model' => $this->getRelatedModelName('ScmType'), 'column' => 'id')),
       'host'        => new sfValidatorPass(array('required' => false)),
       'port'        => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
@@ -48,6 +50,7 @@ abstract class BaseScmFormFilter extends BaseFormFilterDoctrine
   {
     return array(
       'id'          => 'Number',
+      'name'        => 'Text',
       'scm_type_id' => 'ForeignKey',
       'host'        => 'Text',
       'port'        => 'Number',

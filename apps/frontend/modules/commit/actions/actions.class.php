@@ -25,19 +25,8 @@ class commitActions extends sfActions
    */
   public function executeIndex(sfWebRequest $request)
   {
-    // required parameter; the id of the scm to show
-    $scm_id = $request->getParameter('scm');
-    if (!$scm_id)
-    {
-      $scms = Doctrine::getTable('scm')->findAll();
-      $this->scm = $scms->getFirst();
-      $scm_id = $this->scm->getId();
-    }
-    else
-    {
-      $this->scm = Doctrine::getTable('scm')->findOneById($scm_id);
-    }
-    
+    $this->scm = $this->getUser()->getSelectedScm();
+    $scm_id = $this->scm->getId();
     $this->forward404Unless($this->scm);
 
     // if we have received the parameters to show a report, redirect handling to the reports
@@ -70,18 +59,8 @@ class commitActions extends sfActions
    */
   public function executeReport(sfWebRequest $request)
   {
-    // required parameter; the id of the scm to show
-    $scm_id    = $request->getParameter('scm');
-    if (!$scm_id)
-    {
-      $scms = Doctrine::getTable('scm')->findAll();
-      $this->scm = $scms->getFirst();
-      $scm_id = $this->scm->getId();
-    }
-    else
-    {
-      $this->scm = Doctrine::getTable('scm')->findOneById($scm_id);
-    }
+    $this->scm = $this->getUser()->getSelectedScm();
+    $scm_id = $this->scm->getId();
 
     // collect all parameters
     $type      = $request->getParameter('type');
@@ -175,7 +154,10 @@ class commitActions extends sfActions
    */
   public function executeChartAuthorPie(sfWebRequest $request)
   {
+    $scm_id = $request->getParameter('scm_id');
+
     $query = Doctrine::getTable('Commit')->createQuery()->
+            addWhere('scm_id = ?', $scm_id)->
             addGroupBy('author')->
             addSelect('author, count(Commit.author) as author_count');
     $result = $query->fetchArray();
@@ -211,8 +193,11 @@ class commitActions extends sfActions
    */
   public function executeChartAuthorWeekPie(sfWebRequest $request)
   {
+    $scm_id = $request->getParameter('scm_id');
+
     $query = Doctrine::getTable('Commit')->createQuery()->
             addWhere('timestamp >= ?', date('Y-m-d 00:00:00', strtotime('last monday')))->
+            addWhere('scm_id = ?', $scm_id)->
             addGroupBy('author')->
             addSelect('author, count(Commit.author) as author_count');
     $result = $query->fetchArray();
@@ -258,8 +243,11 @@ class commitActions extends sfActions
    */
   public function executeChartAuthorActivityDays(sfWebRequest $request)
   {
+    $scm_id = $this->getUser()->getSelectedScmId();
+
     $username = $request->getParameter('param');
     $query = Doctrine::getTable('Commit')->createQuery()->
+            addWhere('scm_id', $scm_id)->
             addWhere('author = ?', $username);
     $result = $query->fetchArray();
 
@@ -323,8 +311,11 @@ class commitActions extends sfActions
    */
   public function executeChartAuthorActivityHours(sfWebRequest $request)
   {
+    $scm_id = $this->getUser()->getSelectedScmId();
+
     $username = $request->getParameter('param');
     $query = Doctrine::getTable('Commit')->createQuery()->
+            addWhere('scm_id', $scm_id)->
             addWhere('author = ?', $username);
     $result = $query->fetchArray();
 

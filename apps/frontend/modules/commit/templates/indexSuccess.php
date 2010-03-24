@@ -19,14 +19,14 @@
     <?php include_partial('list', array('pager' => $pager)); ?>
   </div>
   <div id="tabs-2">
-    <?php stOfc::createChart(350, 250, '@chart_author_pie', false); ?>
-    <?php stOfc::createChart(350, 250, '@chart_author_week_pie', false); ?>
+    <?php stOfc::createChart(350, 250, '@chart_author_pie?scm_id='.$sf_user->getSelectedScmId(), false); ?>
+    <?php stOfc::createChart(350, 250, '@chart_author_week_pie?scm_id='.$sf_user->getSelectedScmId(), false); ?>
   </div>
 
   <?php if($sf_request->getParameter('type') == 'user'): ?>
   <div id="tabs-3">
-    <?php stOfc::createChart(700, 250, '@chart_author_activity_days?param='.$sf_request->getParameter('param'), false); ?>
-    <?php stOfc::createChart(700, 250, '@chart_author_activity_hours?param='.$sf_request->getParameter('param'), false); ?>
+    <?php stOfc::createChart(700, 250, '@chart_author_activity_days?scm_id='.$sf_user->getSelectedScmId().'&param='.$sf_request->getParameter('param'), false); ?>
+    <?php stOfc::createChart(700, 250, '@chart_author_activity_hours?scm_id='.$sf_user->getSelectedScmId().'&param='.$sf_request->getParameter('param'), false); ?>
   </div>
   <?php endif; ?>
 </div>

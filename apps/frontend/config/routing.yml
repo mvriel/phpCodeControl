@@ -1,6 +1,14 @@
 # You can find more information about this file on the symfony website:
 # http://www.symfony-project.org/reference/1_4/en/10-Routing
 
+scm:
+  class: sfDoctrineRouteCollection
+  options: { model: Scm }
+
+scm_select:
+  url: /scm/select
+  param: { module: scm, action: select}
+
 commit:
   class: sfDoctrineRouteCollection
   options: { model: Commit }

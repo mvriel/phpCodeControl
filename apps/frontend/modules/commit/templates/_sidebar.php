@@ -1,13 +1,6 @@
 <strong>Commits</strong>
 <form method="get" action="<?php echo url_for('commit/index'); ?>">
 <table width="100%" class="form">
-  <tr><td colspan="2" style="text-align: left">
-    <select name="scm">
-      <?php foreach(Doctrine::getTable('Scm')->findAll() as $scm): ?>
-      <option value="<?php echo $scm->getId(); ?>"><?php echo $scm->getPath(); ?></option>
-      <?php endforeach; ?>
-    </select>
-  </td></tr>
   <tr><th>Search on</th><td>
     <select name="type">
       <option value="all">All</option>

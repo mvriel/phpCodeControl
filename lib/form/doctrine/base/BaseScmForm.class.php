@@ -16,6 +16,7 @@ abstract class BaseScmForm extends BaseFormDoctrine
   {
     $this->setWidgets(array(
       'id'          => new sfWidgetFormInputHidden(),
+      'name'        => new sfWidgetFormInputText(),
       'scm_type_id' => new sfWidgetFormDoctrineChoice(array('model' => $this->getRelatedModelName('ScmType'), 'add_empty' => false)),
       'host'        => new sfWidgetFormTextarea(),
       'port'        => new sfWidgetFormInputText(),
@@ -26,11 +27,12 @@ abstract class BaseScmForm extends BaseFormDoctrine
 
     $this->setValidators(array(
       'id'          => new sfValidatorDoctrineChoice(array('model' => $this->getModelName(), 'column' => 'id', 'required' => false)),
+      'name'        => new sfValidatorString(array('max_length' => 100)),
       'scm_type_id' => new sfValidatorDoctrineChoice(array('model' => $this->getRelatedModelName('ScmType'))),
       'host'        => new sfValidatorString(),
       'port'        => new sfValidatorInteger(array('required' => false)),
-      'username'    => new sfValidatorString(array('max_length' => 255)),
-      'password'    => new sfValidatorString(array('max_length' => 255)),
+      'username'    => new sfValidatorString(array('max_length' => 255, 'required' => false)),
+      'password'    => new sfValidatorString(array('max_length' => 255, 'required' => false)),
       'path'        => new sfValidatorString(),
     ));
 

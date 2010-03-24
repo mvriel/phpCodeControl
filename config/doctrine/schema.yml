@@ -5,11 +5,12 @@ ScmType:
 
 Scm:
   columns:
+    name:        { type: string(100), notnull: true }
     scm_type_id: { type: integer, notnull: true }
     host:        { type: string, notnull: true }
     port:        { type: integer }
-    username:    { type: string(255), notnull: true }
-    password:    { type: string(255), notnull: true }
+    username:    { type: string(255) }
+    password:    { type: string(255) }
     path:        { type: string, notnull: true }
   relations:
     ScmType:     ~
