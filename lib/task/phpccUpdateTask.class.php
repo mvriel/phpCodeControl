@@ -65,12 +65,12 @@ EOF;
     if ($last_commit_id_db)
     {
       $this->logSection('info', 'Database reports revision '.$last_commit_id_db.' as latest and SCM reports '.$last_commit_id);
-      $this->logSection('info', 'Importing commits from subversion starting at revision '.$last_commit_id_db.' (please wait as this can take some time)');
+      $this->logSection('info', 'Importing commits from '.$scm->getScmType()->getName().' starting at revision '.$last_commit_id_db.' (please wait as this can take some time)');
     }
     else
     {
       $this->logSection('warning', 'This appears to be your first import of this project, this can take several minutes depending on the size of your project.');
-      $this->logSection('info', 'Importing commits from subversion.');
+      $this->logSection('info', 'Importing commits from '.$scm->getScmType()->getName().'.');
     }
 
     $commits = $scm_object->getCommits($last_commit_id_db, true);
