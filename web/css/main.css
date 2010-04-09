@@ -113,7 +113,7 @@ table.form td
 
 ul.menu
 {
-  background:transparent url('/sfJqueryReloadedPlugin/css/ui-lightness/images/ui-bg_diagonals-thick_20_666666_40x40') repeat-x scroll left top;
+  background:transparent url('../sfJqueryReloadedPlugin/css/ui-lightness/images/ui-bg_diagonals-thick_20_666666_40x40') repeat-x scroll left top;
   border-top:1px solid #BABDB6;
   height:25px;
   list-style: none;
@@ -158,4 +158,10 @@ div.info-box
   padding: 5px;
   margin: -5px;
   margin-bottom: 10px;
+}
+
+div#banner
+{
+  height: 79px;
+  background: transparent url('../sfJqueryReloadedPlugin/css/ui-lightness/images/ui-bg_gloss-wave_35_f6a828_500x100.png') repeat-x scroll left top;
 }

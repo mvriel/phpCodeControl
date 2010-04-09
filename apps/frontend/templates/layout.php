@@ -15,7 +15,7 @@
     </script>
   </head>
   <body>
-    <div style="height: 79px; background: transparent url('/sfJqueryReloadedPlugin/css/ui-lightness/images/ui-bg_gloss-wave_35_f6a828_500x100.png') repeat-x scroll left top;"></div>
+    <div id="banner"></div>
     <ul class="menu">
       <li>
         <form method="get" action="<?php echo url_for('scm/select'); ?>">
