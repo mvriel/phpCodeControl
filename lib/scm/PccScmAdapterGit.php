@@ -135,13 +135,13 @@ class PccScmAdapterGit extends PccScmAdapterAbstract
     $current_index = null;
     foreach($revision_output as $line)
     {
-      if ('index' == substr($line, 0, 4))
+      if ('index' == substr($line, 0, 5))
       {
         $parts = explode(' ', $line);
         $hashes = explode('..', $parts[1]);
         $current_index = $hashes[1];
       }
-      if (substr('--- ', substr($line, 0, 3)))
+      if ('---' == substr($line, 0, 3))
       {
         return implode("\n", $this->execute('show', array('-p', $current_index)));
       }
