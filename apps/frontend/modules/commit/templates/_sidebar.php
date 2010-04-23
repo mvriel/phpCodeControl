@@ -9,7 +9,7 @@
       <option value="file" <?php if ($type === 'file'): ?>selected="selected"<?php endif;?>>File</option>
     </select>
   </td></tr>
-  <tr><th>with</th><td><input name="param" size="10" value="<?php echo $param;?>"/></td></tr>
+  <tr><th>with</th><td><input name="param" size="10" value="<?php echo $sf_data->getRaw('param');?>"/></td></tr>
   <tr><th>In period</th><td>
     <select name="period">
       <option value="all">All</option>

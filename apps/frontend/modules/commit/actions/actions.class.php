@@ -154,6 +154,7 @@ class commitActions extends sfActions
    */
   public function executeChartAuthorPie(sfWebRequest $request)
   {
+    $this->getContext()->getConfiguration()->loadHelpers('Text', $this->getModuleName());
     $scm_id = $request->getParameter('scm_id');
 
     $query = Doctrine::getTable('Commit')->createQuery()->
@@ -164,9 +165,10 @@ class commitActions extends sfActions
 
     $authors = array();
     $values = array();
+
     foreach($result as $item)
     {
-      $authors[] = $item['author'];
+      $authors[] = truncate_text($item['author'], 15);
       $values[] = $item['author_count'];
     }
 

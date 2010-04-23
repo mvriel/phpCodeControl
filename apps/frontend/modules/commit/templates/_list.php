@@ -55,7 +55,7 @@
         <?php endif; ?>
         <tr>
           <td><a href="<?php echo url_for('commit/show?id='.$commit->getId()) ?>"><?php echo $commit->getRevision() ?></a></td>
-          <td><a href="<?php echo url_for('commit/report?type=user&period=all&param='.$commit->getAuthor()) ?>"><?php echo $commit->getAuthor() ?></a></td>
+          <td><a href="<?php echo url_for('commit/report?type=user&period=all&param='.$commit->getRaw('author')) ?>"><?php echo $commit->getAuthor() ?></a></td>
           <td style="white-space: nowrap;"><?php echo format_date($commit->getTimestamp(), 't') ?></td>
           <td style="border-right: 1px solid silver; text-align: right"><?php echo $commit->getFileChange()->count() ?></td>
           <td><a href="<?php echo url_for('commit/show?id='.$commit->getId()).($sf_request->getParameter('type') == 'file' ? '?file_change='.$commit->getFileChange()->getFirst()->getId() : ''); ?>"><?php echo $commit->getMessage() ?></a></td>
