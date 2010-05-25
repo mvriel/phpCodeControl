@@ -12,7 +12,7 @@ class changeComponents extends sfComponents
     $this->previous_commit = $this->file_change->findPrevious();
     $this->inline_diff = null;
     $this->unified_diff = null;
-    
+
     // get the SCM adapter
     $scm = $this->file_change->getCommit()->getScm();
     $scm_adapter = $scm->getAdapter();
@@ -50,7 +50,7 @@ class changeComponents extends sfComponents
       $inline_renderer = new Text_Diff_Renderer_Inline();
       $unified_renderer = new Text_Diff_Renderer_Unified();
       $this->code = sfGeshi::parse_single($this->code, 'php');
-      
+
       // execute and store diff
       $this->inline_diff = $inline_renderer->render($diff);
 
@@ -59,7 +59,7 @@ class changeComponents extends sfComponents
       {
         $this->inline_diff = $this->code;
       }
-      
+
       $this->unified_diff = $unified_renderer->render($diff);
     }
   }

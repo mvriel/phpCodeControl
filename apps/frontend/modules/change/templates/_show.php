@@ -20,7 +20,7 @@
     <pre><?php if ($previous_commit):
         echo !is_null($inline_diff) ? $sf_data->getRaw('inline_diff') : include_partial('global/error_large', array('message' => 'There was an error while obtaining the difference.'));
       else:
-        echo $sf_data->getRaw('code');
+        echo $code;
       endif; ?></pre>
   </div>
 </div>
