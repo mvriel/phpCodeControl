@@ -37,7 +37,7 @@
  * @package    phpCodeControl
  * @subpackage model
  * @author     Mike van Riel <mike.vanriel@naenius.com>
- * @version    SVN: $Id: Builder.php 7021 2010-01-12 20:39:49Z lsmith $
+ * @version    SVN: $Id: Builder.php 7380 2010-03-15 21:07:50Z jwage $
  */
 abstract class BaseScm extends sfDoctrineRecord
 {

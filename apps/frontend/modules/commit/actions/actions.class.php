@@ -26,7 +26,15 @@ class commitActions extends sfActions
   public function executeIndex(sfWebRequest $request)
   {
     $this->scm = $this->getUser()->getSelectedScm();
-    $scm_id = $this->scm->getId();
+    if ($this->scm)
+    {
+      $scm_id = $this->scm->getId();
+    }
+    else
+    {
+      $this->redirect('scm');
+    }
+
     $this->forward404Unless($this->scm);
 
     // if we have received the parameters to show a report, redirect handling to the reports

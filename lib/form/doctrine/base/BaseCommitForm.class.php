@@ -32,10 +32,6 @@ abstract class BaseCommitForm extends BaseFormDoctrine
       'message'   => new sfValidatorString(),
     ));
 
-    $this->validatorSchema->setPostValidator(
-      new sfValidatorDoctrineUnique(array('model' => 'Commit', 'column' => array('revision', 'scm_id')))
-    );
-
     $this->widgetSchema->setNameFormat('commit[%s]');
 
     $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);

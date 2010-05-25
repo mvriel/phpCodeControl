@@ -30,8 +30,16 @@ class myUser extends sfBasicSecurityUser
     {
       $scm = Doctrine::getTable('scm')->findAll()->getFirst();
 
-      $this->setSelectedScmId($scm->getId());
-      $scm_id = $scm->getId();
+      if ($scm)
+      {
+        $this->setSelectedScmId($scm->getId());
+        $scm_id = $scm->getId();
+      }
+      else
+      {
+        $this->setSelectedScmId(0);
+        $scm_id = 0;
+      }
     }
 
     return $scm_id;
