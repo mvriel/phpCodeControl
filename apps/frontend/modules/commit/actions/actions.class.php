@@ -25,6 +25,7 @@ class commitActions extends sfActions
    */
   public function executeIndex(sfWebRequest $request)
   {
+    $this->getResponse()->addHttpMeta('refresh', sfConfig::get('app_auto_refresh')); 
     $this->scm = $this->getUser()->getSelectedScm();
     if ($this->scm)
     {
