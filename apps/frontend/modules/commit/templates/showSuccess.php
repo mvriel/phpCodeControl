@@ -1,7 +1,6 @@
-<table class="full-page" cellpadding="5" cellspacing="0">
-<tr><td class="left-sidebar">
-  <div style="float: right"><small><a href="<?php echo url_for('commit/index') ?>">Back to overview</a></small></div>
-  <strong>Commit</strong>
+<?php slot('sidebar'); ?>
+<div class="section">
+  <h1>Details</h1>
   <table>
     <tbody>
       <tr>
@@ -25,9 +24,15 @@
       </tr>
     </tbody>
   </table>
+</div>
 
-  <hr />
-  <strong>Changes</strong>
+<div class="section">
+  <h1>Actions</h1>
+  <a href="<?php echo url_for('commit/index') ?>">Back to overview</a><br />
+</div>
+
+<div class="section">
+  <h1>Changes</h1>
   <div style="width:190px; overflow: auto;">
   <?php foreach ($commit->getFileChange() as $change): ?>
     <div style="white-space: nowrap">
@@ -36,9 +41,7 @@
     </div>
   <?php endforeach; ?>
   </div>
-</td>
-<td id="change_content">
-  <?php include_component('change', 'show', array('file_change' => $selected_change)); ?>
-</td>
-</tr>
-</table>
+</div>
+<?php end_slot(); ?>
+
+<?php include_component('change', 'show', array('file_change' => $selected_change)); ?>

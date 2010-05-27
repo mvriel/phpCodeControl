@@ -1,4 +1,3 @@
-<strong>Commits</strong>
 <form method="get" action="<?php echo url_for('commit/index'); ?>">
 <table width="100%" class="form">
   <tr><th>Search on</th><td>

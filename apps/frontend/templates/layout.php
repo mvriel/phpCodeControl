@@ -15,26 +15,49 @@
     </script>
   </head>
   <body>
-    <div id="banner"></div>
-    <ul class="menu">
-      <li>
-        <form method="get" action="<?php echo url_for('scm/select'); ?>">
-          <select name="scm_id">
-            <?php foreach(Doctrine::getTable('Scm')->findAll() as $scm): ?>
-            <option value="<?php echo $scm->getId(); ?>" <?php if ($scm->getId() == $sf_user->getSelectedScmId()):?>selected="selected"<?php endif; ?>><?php echo $scm->getName(); ?></option>
-            <?php endforeach; ?>
-          </select>
-          <input type="submit" value="Select" />
-        </form>
-      </li>
-      <li><a href="<?php echo url_for('commit/index');?>" class="item">Commits</a></li>
-      <li><a href="<?php echo url_for('scm/index');?>" class="item">SCMs</a></li>
-    </ul>
+
+  <div id="page">
+
+    <div id="top">
+      <img src="/images/banner-left.png" class="left" align="top"/>
+
+      <form method="get" action="<?php echo url_for('scm/select'); ?>">
+        <select name="scm_id">
+          <?php foreach(Doctrine::getTable('Scm')->findAll() as $scm): ?>
+          <option value="<?php echo $scm->getId(); ?>" <?php if ($scm->getId() == $sf_user->getSelectedScmId()):?>selected="selected"<?php endif; ?>><?php echo $scm->getName(); ?></option>
+          <?php endforeach; ?>
+        </select>
+        <input type="submit" value="Select" />
+      </form>
+    </div>
+
+    <div id="menu">
+      <a href="<?php echo url_for('commit/index');?>" class="menuitem">Commits</a>
+      <a href="<?php echo url_for('scm/index');?>" class="menuitem">SCMs</a>
+    </div>
+
+    <a href="<?php echo url_for('@homepage');?>"><div id="banner"></div></a>
+
     <?php if ($sf_user->hasFlash('error')): ?>
     <div id="error-box">
       <?php echo $sf_user->getFlash('error'); ?>
     </div>
     <?php endif; ?>
-    <?php echo $sf_content ?>
+
+    <div id="sidebar">
+      <?php echo get_slot('sidebar');?>
+    </div>
+
+    <div id="content">
+      <?php echo $sf_content ?>
+    </div>
+
+    <div id="footer">
+      phpCodeControl version <?php echo sfConfig::get('app_version');?> |
+      Icons are part of the
+      <a href="http://www.everaldo.com">Crystal Project</a> and copyright of
+      <a href="mailto:everaldo@everaldo.com">Everaldo Coelho</a>
+    </div>
+
   </body>
 </html>
