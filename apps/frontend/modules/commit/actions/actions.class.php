@@ -25,7 +25,7 @@ class commitActions extends sfActions
    */
   public function executeIndex(sfWebRequest $request)
   {
-    $this->getResponse()->addHttpMeta('refresh', sfConfig::get('app_auto_refresh')); 
+    $this->getResponse()->addHttpMeta('refresh', sfConfig::get('app_auto_refresh'));
     $this->scm = $this->getUser()->getSelectedScm();
     if ($this->scm)
     {
@@ -258,7 +258,7 @@ class commitActions extends sfActions
 
     $username = $request->getParameter('param');
     $query = Doctrine::getTable('Commit')->createQuery()->
-            addWhere('scm_id', $scm_id)->
+            addWhere('scm_id = ?', $scm_id)->
             addWhere('author = ?', $username);
     $result = $query->fetchArray();
 
@@ -326,7 +326,7 @@ class commitActions extends sfActions
 
     $username = $request->getParameter('param');
     $query = Doctrine::getTable('Commit')->createQuery()->
-            addWhere('scm_id', $scm_id)->
+            addWhere('scm_id = ?', $scm_id)->
             addWhere('author = ?', $username);
     $result = $query->fetchArray();
 
