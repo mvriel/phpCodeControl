@@ -39,7 +39,7 @@
     <a href="<?php echo url_for('@homepage');?>"><div id="banner"></div></a>
 
     <?php if ($sf_user->hasFlash('error')): ?>
-    <div id="error-box">
+    <div class="error-box">
       <?php echo $sf_user->getFlash('error'); ?>
     </div>
     <?php endif; ?>

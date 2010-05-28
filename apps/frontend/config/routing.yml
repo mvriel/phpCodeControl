@@ -13,6 +13,10 @@ commit:
   class: sfDoctrineRouteCollection
   options: { model: Commit }
 
+change_download:
+  url: /change/:file_change_id/download
+  param: { module: change, action: download}
+
 change:
   class: sfDoctrineRouteCollection
   options: { model: FileChange }
@@ -48,7 +52,7 @@ commit_report_param:
   url: /commit/report/:type/:period/:param
   param: { module: commit, action: report }
   options: { model: Commit, type: list }
-  
+
 # default rules
 homepage:
   class: sfDoctrineRoute

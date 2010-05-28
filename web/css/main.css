@@ -248,7 +248,7 @@ form small
   color:                          gray;
 }
 
-div#error-box
+div.error-box
 {
   color:                          red;
   font-size:                      12px;

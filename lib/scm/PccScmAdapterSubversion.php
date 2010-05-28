@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 
+ *
  *
  * @author Mike van Riel <mike.vanriel@naenius.com>
  */
@@ -24,7 +24,7 @@ class PccScmAdapterSubversion extends PccScmAdapterAbstract
     {
       $port = $this->getScm()->getScmType()->getDefaultPort();
     }
-    
+
     $path = $this->getScm()->getPath();
     $username = $this->getScm()->getUsername();
     $password = $this->getScm()->getPassword();
@@ -39,7 +39,7 @@ class PccScmAdapterSubversion extends PccScmAdapterAbstract
       $argument = str_replace('%HOST%', $host, $argument);
       $argument = escapeshellarg($argument);
     }
-    
+
     $command = 'svn '.escapeshellarg($command).' '.implode(' ', $arguments).' --no-auth-cache --username '.escapeshellarg($username).' --password '.escapeshellarg($password).' --non-interactive';
     foreach ($params as $name => $param)
     {
@@ -59,7 +59,7 @@ class PccScmAdapterSubversion extends PccScmAdapterAbstract
 
   /**
    * Returns the last revision identifier
-   * 
+   *
    * @return interface
    */
   public function getLastRevisionId()
@@ -112,12 +112,11 @@ class PccScmAdapterSubversion extends PccScmAdapterAbstract
           case 'D': $change->setFileChangeTypeId(3); break;
           default:
             $change->setFileChangeTypeId(4); break;
-//            throw new Exception('An unknown file change type was encountered: '.(string)$path['action']);
         }
 
 //        $params = array('change' => $commit->getId(), 'extensions' => '-b -w --ignore-eol-style');
 //        $content = $this->execute('diff', array('%HOST%'.(string)$path), $params);
-//        
+//
 //        // all unified diffs start with a - and +, thus we offset the additions and deletions
 //        $insertions = -1;
 //        $deletions = -1;
@@ -135,10 +134,10 @@ class PccScmAdapterSubversion extends PccScmAdapterAbstract
 //        }
 //        $change->setInsertions($insertions);
 //        $change->setDeletions($deletions);
-        
+
         $commit->getFileChange()->add($change);
       }
-      
+
       if ($save)
       {
         $commit->save();

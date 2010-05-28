@@ -1,4 +1,4 @@
 all:
   version:      1.0.0
-  simulate:     { scm: false }
+  simulate:     { scm: false, file: example_final.diff, previous_file: example.diff  }
   auto_refresh: 30
