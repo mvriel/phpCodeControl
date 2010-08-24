@@ -37,7 +37,7 @@
   <?php foreach ($commit->getFileChange() as $change): ?>
     <div style="white-space: nowrap">
       <img src="<?php echo image_path('icons/change_type_'.$change->getFileChangeType()->getIcon().'.png'); ?>" alt="<?php echo $change->getFileChangeType(); ?>"/>
-      <a href="#" onclick="jQuery('#change_content').load('<?php echo url_for('commit/loader');?>', function(){ jQuery('#change_content').load('<?php echo url_for('change/show?id='.$change->getId());?>'); });" title="<?php echo $change->getFilePath(); ?>"><?php echo basename($change->getFilePath()); ?></a><br />
+      <a href="#" onclick="jQuery('#content').load('<?php echo url_for('commit/loader');?>', function(){ jQuery('#content').load('<?php echo url_for('change/show?id='.$change->getId());?>'); });" title="<?php echo $change->getFilePath(); ?>"><?php echo basename($change->getFilePath()); ?></a><br />
     </div>
   <?php endforeach; ?>
   </div>
