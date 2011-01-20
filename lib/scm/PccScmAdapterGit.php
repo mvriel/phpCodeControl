@@ -156,6 +156,10 @@ class PccScmAdapterGit extends PccScmAdapterAbstract
     $local_repo = $this->getLocalRepoPath();
     if (!is_dir($local_repo))
     {
+      if(!mkdir($local_repo, 0777, true))
+      {
+          throw new Exception('Could not create directory '.$local_repo);
+      }
       $this->execute('clone', array($this->getRemoteScmUrl(), $local_repo));
     }
     else

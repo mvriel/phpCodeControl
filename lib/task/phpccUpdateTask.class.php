@@ -6,7 +6,7 @@ class phpccUpdateTask extends sfBaseTask
   {
     // add your own arguments here
     $this->addArguments(array(
-      new sfCommandArgument('scm', sfCommandArgument::REQUIRED, 'The id of the scm definition to update'),
+      new sfCommandArgument('scm', sfCommandArgument::OPTIONAL, 'The id of the scm definition to update'),
     ));
 
     $this->addOptions(array(
@@ -48,13 +48,28 @@ EOF;
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'] ? $options['connection'] : null)->getConnection();
 
-    $scm = Doctrine::getTable('Scm')->findOneById($arguments['scm']);
+    if ($arguments['scm'])
+    {
+      $scms = Doctrine::getTable('Scm')->findById($arguments['scm']);
+    }
+    else
+    {
+      $scms = Doctrine::getTable('Scm')->findAll();
+    }
 
+    foreach($scms as $scm)
+    {
+      $this->updateForScm($scm);
+    }
+  }
+
+  protected function updateForScm(Scm $scm)
+  {
     $scm_object = $scm->getAdapter();
 
-    $this->logSection('info', 'Determining latest revision number');
+    $this->logSection('info', 'Determining latest revision number for '.$scm->getName());
     $last_commit_id = $scm_object->getLastRevisionId();
-    $last_commit_id_db = $this->getLastCommitIdFromDatabase($arguments['scm']);
+    $last_commit_id_db = $this->getLastCommitIdFromDatabase($scm->getId());
 
     if ($last_commit_id == $last_commit_id_db)
     {
