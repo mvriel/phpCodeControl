@@ -41,6 +41,7 @@ class sfGeshi
     if (file_exists($alternative_file))
     {
       $geshi_object->set_language_path($alternative_directory);
+      $geshi_object->enable_line_numbers(GESHI_FANCY_LINE_NUMBERS);
     }
     return $geshi_object->parse_code();
   }

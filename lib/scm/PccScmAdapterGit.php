@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 
+ *
  *
  * @author Stefan Koopmanschap <left@leftontheweb.com>
  */
@@ -12,12 +12,12 @@ class PccScmAdapterGit extends PccScmAdapterAbstract
    *
    * @param string $command
    * @param array $params
-   * 
+   *
    * @return array
    */
   protected function execute($command, $arguments = array(), $params = array())
   {
-    // compose command and execute    
+    // compose command and execute
     $command = 'git '.$command.' '.implode(' ', $arguments);
     foreach ($params as $name => $param)
     {
@@ -37,7 +37,7 @@ class PccScmAdapterGit extends PccScmAdapterAbstract
 
   /**
    * Returns the last revision identifier
-   * 
+   *
    * @return string
    */
   public function getLastRevisionId()
@@ -108,10 +108,10 @@ class PccScmAdapterGit extends PccScmAdapterAbstract
           default:
             $change->setFileChangeTypeId(4); break;
         }
-        
+
         $commit->getFileChange()->add($change);
       }
-      
+
       if ($save)
       {
         $commit->save();
@@ -191,7 +191,7 @@ class PccScmAdapterGit extends PccScmAdapterAbstract
 
   /**
    * Get the path of the local git clone
-   * 
+   *
    * @return string
    */
   protected function getLocalRepoPath()
@@ -251,4 +251,16 @@ class PccScmAdapterGit extends PccScmAdapterAbstract
 
     return $output;
   }
+
+  /**
+   * Returns the unified diff of a specific file at a specific revision (defaults to HEAD).
+   *
+   * @param string $file
+   * @param string $revision
+   */
+  public function getUnifiedDiff($file, $revision = 'HEAD')
+  {
+    return $this->execute('diff', array('--combined', '-p', $revision, $file));
+  }
+
 }

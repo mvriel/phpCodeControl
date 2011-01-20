@@ -160,4 +160,15 @@ class PccScmAdapterSubversion extends PccScmAdapterAbstract
     return $this->execute('cat', array('%HOST%'.$file.'@'.$revision));
   }
 
+  /**
+   * Returns the unified diff of a specific file at a specific revision (defaults to HEAD).
+   *
+   * @param string $file
+   * @param string $revision
+   */
+  public function getUnifiedDiff($file, $revision = 'HEAD')
+  {
+    return $this->execute('diff', array('%HOST%'.$file, '-r'.($revision-1).':'.$revision));
+  }
+
 }

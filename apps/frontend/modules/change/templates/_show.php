@@ -24,14 +24,14 @@
 
   </ul>
   <?php if ($previous_commit && ($type == 'text')): ?>
-  <div id="tabs-1"><pre><?php echo !is_null($unified_diff) ? sfGeshi::parse_single($sf_data->getRaw('unified_diff'), 'diff') : include_partial('global/error_large', array('message' => 'There was an error while obtaining the difference.')); ?></pre></div>
+  <div id="tabs-1"><pre style="overflow: auto; display: block"><?php echo !is_null($unified_diff) ? sfGeshi::parse_single($sf_data->getRaw('unified_diff'), 'diff') : include_partial('global/error_large', array('message' => 'There was an error while obtaining the difference.')); ?></pre></div>
   <?php endif; ?>
   <div id="tabs-2">
     <?php if ($type == 'image'): ?>
       <img src="<?php echo url_for('@change_download?file_change_id='.$file_change->getId())?>" /><br />
     <?php endif; ?>
     <?php if ($type == 'text'): ?>
-    <pre><?php if ($previous_commit):
+    <pre style="overflow: auto; display: block"><?php if ($previous_commit):
         echo !is_null($inline_diff) ? $sf_data->getRaw('inline_diff') : include_partial('global/error_large', array('message' => 'There was an error while obtaining the difference.'));
       else:
         echo $code;

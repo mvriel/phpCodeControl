@@ -14,12 +14,6 @@ class changeComponents extends sfComponents
    */
   public function executeShow(sfWebRequest $request)
   {
-    // include the Text_Diff files that we need
-    include_once('Text/Diff.php');
-    include_once('Text/Diff/Renderer/inline.php');
-    include_once('Text/Diff/Renderer/unified.php');
-    include_once('Text/Diff/Engine/string.php');
-
     // initialize the basic variables
     $this->previous_commit = $this->file_change->findPrevious();
     $this->previous_image  = '';
@@ -75,30 +69,13 @@ class changeComponents extends sfComponents
       case 'application/javascript':
       case 'application/json':
       case 'application/xml':
-        $this->type = 'text';
+        $this->unified_diff = $scm_adapter->getUnifiedDiff(
+          $this->file_change->getFilePath(),
+          $this->file_change->getCommit()->getRevision()
+        );
 
-        // if there is no old commit; no need to execute a diff
-        if (!$old)
-        {
-          break;
-        }
-
-        // prepare diff
-        $diff = new Text_Diff('auto', array(explode(PHP_EOL, $old), explode(PHP_EOL, $this->code)));
-        $inline_renderer = new Text_Diff_Renderer_Inline();
-        $unified_renderer = new Text_Diff_Renderer_Unified();
         $this->code = sfGeshi::parse_single($this->code, 'php');
-
-        // execute and store diff
-        $this->inline_diff = $inline_renderer->render($diff);
-
-        // if the diff is empty, no changes can be found (which is unusual)
-        if (!$this->inline_diff)
-        {
-          $this->inline_diff = $this->code;
-        }
-
-        $this->unified_diff = $unified_renderer->render($diff);
+        $this->inline_diff = $this->code;
         break;
 
       // images should be displayed as an old and new version on two different tabs
